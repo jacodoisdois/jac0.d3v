@@ -102,7 +102,7 @@ function Login (): ReactElement {
 
       console.log('Login successful!')
 
-      navigate('/home')
+      navigate('/')
     } catch (error) {
       console.log(error)
     }
