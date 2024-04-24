@@ -5,7 +5,8 @@ import Header from '../components/Header'
 import MDEditor from '@uiw/react-md-editor'
 import Footer from '../components/Footer'
 import TagInput from '../components/TagInput'
-// import axiosInstance from '../libs/axiosInstance'
+import axiosInstance from '../libs/axiosInstance'
+import { useNavigate } from 'react-router-dom'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -84,6 +85,40 @@ const InputField = styled.input`
   }
 
 `
+const EditorHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const ToggleButton = styled.button`
+  padding: 5px 10px;
+  border: none;
+  border-radius: 30px;
+  width: 70px;
+  height: 15px;
+  font-size: 0.6em;
+  background-color: #1a2c4b;
+  border: 1px #1a2c4b solid;
+  color: #f1f7f3;
+  justify-self: center;
+  align-self: center;
+  padding-bottom: 3px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', Arial;
+  margin-right: 10px;
+  &:hover {
+    background-color: #1b2127;
+    border: 1px #f1f7f3 solid;
+  }
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+`
+const ToggleContainer = styled.div`
+display: flex;
+align-items: center;
+
+`
 
 interface formInput {
   title: string
@@ -93,6 +128,7 @@ interface formInput {
 }
 
 function EditPage (): ReactElement {
+  const navigate = useNavigate()
   const [form, setForm] = React.useState<formInput>({
     title: '',
     content: '',
@@ -106,13 +142,14 @@ function EditPage (): ReactElement {
 
   const handleCreatePost = async (): Promise<void> => {
     try {
-      // const response = await axiosInstance().post('auth/login',
-      //   {
-      //     ...form
-      //   }
-      // )
+      await axiosInstance().post('auth/login',
+        {
+          ...form
+        }
+      )
 
-      console.log(form)
+      console.log('Post created successfully')
+      navigate('/')
     } catch (error) {
       console.log(error)
     }
@@ -129,7 +166,16 @@ function EditPage (): ReactElement {
         <Header />
         <Title >New Post</Title>
         <EditorStyle>
-          <InputField placeholder='Post title' onChange={e => { setForm({ ...form, title: e.target.value }) }} />
+          <EditorHeaderContainer>
+            <InputField placeholder='Post title' onChange={e => { setForm({ ...form, title: e.target.value }) }} />
+            <ToggleContainer>
+              <p style={{ fontSize: '0.7em', justifySelf: 'center', alignSelf: 'center' }}>Visible:</p>
+              <ToggleButton onClick={() => { setForm({ ...form, visible: !form.visible }) }} style={{
+                background: form.visible ? 'green' : 'white',
+                color: form.visible ? 'white' : 'black'
+              }}>{form.visible ? 'ON' : 'OFF'}</ToggleButton>
+            </ToggleContainer>
+          </EditorHeaderContainer>
           <MDEditor
             value={form.content}
             onChange={(contentValue) => { setForm({ ...form, content: contentValue ?? '' }) }}
@@ -139,7 +185,9 @@ function EditPage (): ReactElement {
               color: 'white'
             }}
           />
-        <TagInput className='tagInput' onTagsChange={handleTags} />
+          <div style={{ display: 'flex' }}>
+            <TagInput className='tagInput' onTagsChange={handleTags} />
+          </div>
         </EditorStyle>
         <Button onClick={async () => { await handleCreatePost() }}>Save Post</Button>
         <Footer />

@@ -37,7 +37,7 @@ const TagInput: React.FC<TagInputProps> = ({ onTagsChange, className }) => {
   }
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === ' ' && inputValue.trim() !== '') {
+    if (event.key === ' ' && inputValue.trim() !== '' && tags.length <= 6) {
       setTags([...tags, inputValue.trim()])
       setInputValue('')
       onTagsChange([...tags, inputValue.trim()])
