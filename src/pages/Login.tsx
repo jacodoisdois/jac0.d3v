@@ -6,21 +6,8 @@ import { Helmet } from 'react-helmet'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import axiosInstance from '../libs/axiosInstance'
 import { useNavigate } from 'react-router-dom'
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Press Start 2P', Arial, sans-serif;
-    background-color: #1b2127;
-    color: #f1f7f3;
-  }
- 
-
-  a {
-    color: #f1f7f3;
-  }
-`
+import { GlobalStyle } from '../styles'
+import { labels } from '../common/labels'
 
 const Header = styled.div`
   background-color: #282e3b;
@@ -119,7 +106,7 @@ function Login (): ReactElement {
       <Container>
         <Header className="square">
           <div>
-            <p>J2two</p>
+            <a href="/" className='logo-text'>{labels.LOGO_NAME}</a>
           </div>
           <HeaderMenu>
             <FormContainer onSubmit={(event) => void handleSubmit(handleLogin)(event)}>

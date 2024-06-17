@@ -1,29 +1,19 @@
-import React, { type ReactElement } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import React, { useEffect, useState, type ReactElement } from 'react'
+import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
-import Post from '../components/Post'
+import { PostPreview } from '../components/PostPreview'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Press Start 2P', Arial; 
-    background-color: #1b2127;
-  }
-  
-  a {
-    color: #f2f7f3;
-  }
-`
+import axiosInstance from '../libs/axiosInstance'
+import { type Post, type getPostsResponse } from '../common/types'
+import { isAxiosError } from 'axios'
+import { GlobalStyle } from '../styles'
 
 const Posts = styled.div`
-  background-color: #292f3b; 
   color: #f2f7f3;
-  padding: 10px;
   flex-grow: 4;
-  max-width: 1080px;
+  min-width: 60%;
+  max-width: 80%;
 `
 
 const Section = styled.div`
@@ -32,11 +22,22 @@ const Section = styled.div`
   padding: 10px;
   flex-grow: 1;
   margin-left: 0.5%;
+  min-width: 20%;
+  max-width: 20%;
+  font-size: 0.9em;
+
+  p{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  ul{
+    padding: 0;
+    padding-left: 5px;
+  }
 `
 
 const ContentContainer = styled.div`
   display: flex;
-  flex: 1;
   margin-top: 0.5%;
 `
 
@@ -44,7 +45,85 @@ const Container = styled.div`
   margin: 0.5%;
 `
 
+const YearSummaryItem = styled.li`
+  list-style: none;
+  padding: 0;
+
+  details summary {
+    cursor: pointer;
+  }
+
+  details ul {
+    padding-left: 20px;
+  }
+  
+  summary:hover {
+    color: #8e8e8e;
+  }
+`
+
+const MonthSummaryItem = styled.li`
+  cursor: pointer;
+  text-decoration: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+  &:hover {
+    color: #8e8e8e;
+  }
+`
+
+const TextButton = styled.p`
+  cursor: pointer;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  &:hover {
+    color: #8e8e8e;
+  }
+
+`
+
 function Home (): ReactElement {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [posts, setPosts] = useState<Post[]>([])
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
+  const [archives, setArchives] = useState<Record<string, Record<string, Post[]>>>({})
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    setIsLoggedIn(!!token)
+    const fetchData = async (): Promise<void> => {
+      try {
+        const response = (await axiosInstance().get('/posts')).data as unknown as getPostsResponse
+        if (response.data) {
+          setPosts(response.data)
+          setFilteredPosts(response.data)
+          groupPostsByDate(response.data)
+        }
+      } catch (e) {
+        if (isAxiosError(e)) console.log(e.message)
+      }
+    }
+    void fetchData()
+  }, [])
+
+  const groupPostsByDate = (posts: Post[]): void => {
+    const grouped: Record<string, Record<string, Post[]>> = {}
+    posts.forEach(post => {
+      const date = new Date(post.createdAt)
+      const year = date.getFullYear().toString()
+      const month = date.toLocaleString('default', { month: 'long' })
+      if (!grouped[year]) grouped[year] = {}
+      if (!grouped[year][month]) grouped[year][month] = []
+      grouped[year][month].push(post)
+    })
+    setArchives(grouped)
+  }
+
+  const filterPosts = (year: string, month: string): void => {
+    const data = !year || !month ? posts : archives[year][month]
+    setFilteredPosts(data)
+  }
+
   return (
     <>
       <Helmet>
@@ -53,14 +132,38 @@ function Home (): ReactElement {
       </Helmet>
       <GlobalStyle />
       <Container>
-        <Header />
+        <Header isLoggedIn={isLoggedIn} />
         <ContentContainer>
-          <Posts >
-            <Post />
+          <Posts>
+            {filteredPosts.length
+              ? filteredPosts.map((post): ReactElement => (
+                  <PostPreview key={post.id} post={post} />
+              ))
+              : (<p>Failed to load posts</p>)
+            }
           </Posts>
-          <Section >section</Section>
+          <Section>
+            <p>Archives</p>
+            <TextButton onClick={() => { filterPosts('', '') }} style={{ fontSize: '0.2em' }}>clean filters</TextButton>
+            <ul>
+              {Object.keys(archives).map(year => (
+                <YearSummaryItem key={year}>
+                  <details>
+                    <summary>{year}</summary>
+                    <ul>
+                      {Object.keys(archives[year]).map(month => (
+                        <MonthSummaryItem key={month} onClick={() => { filterPosts(year, month) }}>
+                          {month}
+                        </MonthSummaryItem>
+                      ))}
+                    </ul>
+                  </details>
+                </YearSummaryItem>
+              ))}
+            </ul>
+          </Section>
         </ContentContainer>
-        <Footer/>
+        <Footer />
       </Container>
     </>
   )
