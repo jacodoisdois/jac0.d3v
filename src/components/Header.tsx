@@ -12,11 +12,18 @@ const HeaderContainer = styled.header`
 const HeaderMenu = styled.div`
   margin-top: 5px;
   font-family: 'VT323', Arial;
+  
   .bt-menu {
     margin: 0 5px 0 0px;
     font-size: 0.3em;
     font-family: 'Press Start 2P';
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
+
+  .bt-menu:hover{
+    color: #8e8e8e;
+  }
+  
 `
 
 interface HeaderProps {
@@ -24,6 +31,10 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
+  const handleLogout = (): void => {
+    localStorage.removeItem('token')
+  }
+
   return (
     <HeaderContainer>
       <div>
@@ -32,7 +43,12 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
       <HeaderMenu>
         <a href="/" className='bt-menu'>Posts</a>
         <a href="/about" className='bt-menu'>About me</a>
-        {isLoggedIn ? (<a href="/edit" className='bt-menu'>Edit</a>) : (<a href="/login" className='bt-menu'>Login</a>)}
+        {isLoggedIn
+          ? (<>
+          <a href="/edit" className='bt-menu'>Edit</a>
+          <a onClick={() => { handleLogout() }} href='/' className='bt-menu'>Logout</a>
+        </>)
+          : (<a href="/login" className='bt-menu'>Login</a>)}
       </HeaderMenu>
     </HeaderContainer>
   )

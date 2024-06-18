@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { GlobalStyle } from '../styles'
-import { gitLogo, ishikawaImage, linkedinLogo, mysqlLogo, nodeLogo, oracleLogo, railsLogo, stackoverflowLogo, tsLogo } from '../assets/images/images'
+import { gitLogo, graphQLLogo, ishikawaImage, linkedinLogo, mysqlLogo, nodeLogo, oracleLogo, railsLogo, stackoverflowLogo, tsLogo } from '../assets/images/images'
 const Content = styled.div`
   background-color: #292f3b;
   color: #f2f7f3;
@@ -58,6 +58,12 @@ const Section = styled.div`
   text-align: justify;
   margin-top: 20px;
   width: 100%;
+  
+  .section, p{
+    font-family: "VT323";
+    font-size: 1.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
 `
 
 const TechnologiesContainer = styled.div`
@@ -65,6 +71,10 @@ const TechnologiesContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
+
+  a:hover img {
+    filter: grayscale(60%);
+}
 `
 
 const TechnologyLogo = styled.img`
@@ -77,6 +87,10 @@ const SocialNetworksContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
+
+  a:hover img {
+    filter: grayscale(60%);
+}
 `
 
 const SocialNetworkLogo = styled.img`
@@ -97,39 +111,61 @@ function About (): ReactElement {
       <Helmet>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"></link>
       </Helmet>
       <GlobalStyle />
       <Container>
         <Header isLoggedIn={isLoggedIn} />
         <ContentContainer>
           <Content>
-          <ImageContainer>
-            <Image src={ishikawaImage} alt="Ishikawa" />
-          </ImageContainer>
-          <SectionContainer>
-            <Section>
-              <h2>About Me</h2>
-              <p>I am a software developer, born in 2000, with experience in the financial market. Over the past four years, I have been deeply involved with TypeScript and various financial technologies in Brazil. My journey includes developing robust and innovative solutions that meet the complex needs of the financial sector, always prioritizing security and efficiency. My passion for technology and commitment to excellence have driven me to deliver high-quality results and significantly contribute to the success of the projects I am involved in.</p>
-            </Section>
-            <Section>
-              <h2>Technologies</h2>
-              <TechnologiesContainer>
-                <TechnologyLogo src={tsLogo} alt="Typescript" />
-                <TechnologyLogo src={nodeLogo} alt="NodeJS" />
-                <TechnologyLogo src={railsLogo} alt="Ruby" />
-                <TechnologyLogo src={oracleLogo} alt="Oracle" />
-                <TechnologyLogo src={mysqlLogo} alt="MySQL" />
-              </TechnologiesContainer>
-            </Section>
-            <Section>
-              <h2>Social Networks</h2>
-              <SocialNetworksContainer>
-                <SocialNetworkLogo src={gitLogo} alt="Github" />
-                <SocialNetworkLogo src={stackoverflowLogo} alt="Stackoverflow" />
-                <SocialNetworkLogo src={linkedinLogo} alt="Linkeding" />
-              </SocialNetworksContainer>
-            </Section>
-          </SectionContainer>
+            <ImageContainer>
+              <Image src={ishikawaImage} alt="Ishikawa" />
+            </ImageContainer>
+            <SectionContainer>
+              <Section className='section'>
+                <h2>About Me</h2>
+                <p>I am a technology professional with solid experience in the following technologies and languages: TypeScript, OracleQL, GraphQL, MySQL, Kafka, JavaScript, Ruby, and Rails. I have a background of 3 years providing N3 support for financial systems (Sinacor and brokertools by INOA) and participating in system homologation, including systems related to RSFN/SPB. During this period, I developed skills in handling fix messaging issues.</p>
+                <p>In 2023, I switched careers to become a back-end software developer, focusing on development in TypeScript in a distributed system. My experience includes working with Kafka, GraphQL, microservices, monorepo, and CI/CD and Kubernetes technologies.</p>
+                <p>I always enjoy finding technological ways to simplify daily tasks and solve arising problems using and researching for the best available tools.</p>
+              </Section>
+              <Section>
+                <h2>Technologies</h2>
+                <TechnologiesContainer>
+                  <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={tsLogo} alt="Typescript" title="Typescript" />
+                  </a>
+                  <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={nodeLogo} alt="NodeJS" title="NodeJS" />
+                  </a>
+                  <a href="https://graphql.org/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={graphQLLogo} alt="GraphQL" title="GraphQL" height="1000px" />
+                  </a>
+                  <a href="https://rubyonrails.org/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={railsLogo} alt="Ruby" title="Ruby" />
+                  </a>
+                  <a href="https://www.oracle.com/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={oracleLogo} alt="Oracle" title="Oracle" />
+                  </a>
+                  <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer">
+                    <TechnologyLogo src={mysqlLogo} alt="MySQL" title="MySQL" />
+                  </a>
+                </TechnologiesContainer>
+              </Section>
+              <Section>
+                <h2>Social Networks</h2>
+                <SocialNetworksContainer>
+                  <a href="https://github.com/jacodoisdois" target="_blank" rel="noopener noreferrer">
+                    <SocialNetworkLogo src={gitLogo} alt="Github" title="Github" />
+                  </a>
+                  <a href="https://stackoverflow.com/users/10754944" target="_blank" rel="noopener noreferrer">
+                    <SocialNetworkLogo src={stackoverflowLogo} alt="Stackoverflow" title="Stackoverflow" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/jacomaga" target="_blank" rel="noopener noreferrer">
+                    <SocialNetworkLogo src={linkedinLogo} alt="LinkedIn" title="LinkedIn" />
+                  </a>
+                </SocialNetworksContainer>
+              </Section>
+            </SectionContainer>
           </Content>
         </ContentContainer>
         <Footer />

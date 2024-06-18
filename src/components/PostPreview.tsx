@@ -12,6 +12,7 @@ const PostContainer = styled.div`
   color: #f2f7f3;
   padding: 10px;
   flex-grow: 6;
+  
   &:not(:last-child) {
     margin-bottom: 0.5%;
   }
@@ -51,16 +52,16 @@ const formatDateString: FormatDateString = (dateString) => {
 }
 
 const GradientBanner = styled.div`
-  background: linear-gradient(to top, rgba(27, 33, 39, 0.8), rgba(27, 33, 39, 0));
+  background: linear-gradient(to top, rgba(27, 33, 39, 0.2), rgba(27, 33, 39, 0));
   color: #f2f7f3;
-  padding-bottom: 20px;
+  padding-bottom: 1%;
   text-align: center;
   cursor: pointer;
-  margin-top: -40px; /* Sobrepor ao espaço do Content */
+  margin-top: -40px;
   
   &:hover{
-    color: #8e8e8e;
-    background: linear-gradient(to top, rgba(66, 67, 82, 0.8), rgba(27, 33, 39, 0));
+    color: #d0d0d0;
+    background: linear-gradient(to top, rgba(58, 67, 86, 0.6), rgba(27, 33, 39, 0));
   }
 `
 

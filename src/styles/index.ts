@@ -30,5 +30,10 @@ export const GlobalStyle = createGlobalStyle`
   .logo-text{
     text-decoration: none;
     font-size: 1.7em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .logo-text:hover{
+    color: #8e8e8e;
   }
 `
