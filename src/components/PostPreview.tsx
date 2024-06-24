@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { type Post } from '../common/types'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-import { format } from 'date-fns'
+import { formatDateString } from '../utils/formatDateString'
 
 const PostContainer = styled.div`
   text-justify: newspaper;
@@ -35,21 +35,124 @@ const PostContainer = styled.div`
     font-family: Arial, Helvetica, sans-serif;
   }
 
-  .content-container * {
-      font-size: 0.8em; 
+  .content-container {
+    h1 {
+      font-size: 1.7em;
+      margin-bottom: 0.5em;
+    }
+    
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    
+    h3 {
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+    }
+    
+    h4 {
+      font-size: 1.05em;
+      margin-bottom: 0.5em;
+    }
+    
+    p {
+      font-size: 0.8em;
+      margin-bottom: 1em;
+      line-height: 1.5;
+    }
+    
+    ul, ol {
+      margin-left: 2em;
+      margin-bottom: 1em;
+      
+      li {
+        margin-bottom: 0.5em;
+      }
+    }
+    
+    pre {
+      background-color: #f6f8fa;
+      padding: 1em;
+      border-radius: 5px;
+      overflow: auto;
+      margin-bottom: 1em;
+      
+      code {
+        background: none;
+        color: #333;
+        text-shadow: none;
+        font-family: "Cutive Mono", monospace;
+        font-weight: 600;
+        font-style: normal;
+      }
+    }
+    
+    blockquote {
+      border-left: 4px solid #ccc;
+      padding-left: 1em;
+      margin-left: 0;
+      color: #f2e022;
+      font-style: italic;
+      font-family: "Parisienne", cursive;
+      font-weight: 400;
+      font-size: 2em;
+      text-shadow: none;
+      text-decoration: underline;
+      text-decoration-color: #a89b0f;
+      text-decoration-thickness: 1px;
+      text-decoration-style: solid;
+    }
+
+    blockquote, p {
+      border-bottom: 1px, #dccb11, solid !important;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1em;
+      
+      th, td {
+        border: 1px solid #ddd;
+        padding: 0.5em;
+        text-align: left;
+        text-shadow: none;
+      }
+      
+      th {
+        background-color: #ffffff;
+        color: #2a2e3b;
+        text-shadow: none;
+      }
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
+    
+    a {
+      color: #0366d6;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    hr {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 2em 0;
+    }
   }
 `
 
 const Content = styled.div`
   margin-bottom: 40px; 
 `
-
-type FormatDateString = (dateString: string) => string
-
-const formatDateString: FormatDateString = (dateString) => {
-  const date = new Date(dateString)
-  return format(date, 'dd-MM-yyyy - HH:mm:ss')
-}
 
 const GradientBanner = styled.div`
   background: linear-gradient(to top, rgba(27, 33, 39, 0.2), rgba(27, 33, 39, 0));

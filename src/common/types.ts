@@ -24,3 +24,8 @@ export interface PageInfo {
   pageSize: number
   totalPages: number
 }
+
+export interface getPostResponse {
+  data: Post
+  pageInfo: PageInfo
+}

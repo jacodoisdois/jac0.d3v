@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-void */
 import React, { type ReactElement } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import axiosInstance from '../libs/axiosInstance'
@@ -59,31 +57,27 @@ const LoginButton = styled.button`
     background-color: #1b2127;
   }
 `
+
 interface Inputs {
   username: string
   password: string
 }
 
 function Login (): ReactElement {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm<Inputs>()
-
+  const { register, handleSubmit } = useForm<Inputs>()
   const navigate = useNavigate()
 
-  const handleLogin: SubmitHandler<Inputs> = async (data): Promise<void> => {
+  const handleLogin: SubmitHandler<Inputs> = async (data, e): Promise<void> => {
+    e?.preventDefault()
     try {
-      const response = await axiosInstance().post('auth/login',
-        {
-          emailOrUsername: data.username,
-          password: data.password
-        }
-      )
+      const response = await axiosInstance().post('auth/login', {
+        emailOrUsername: data.username,
+        password: data.password
+      })
 
-      const token = response.data.token
+      const token = response?.data.token
+
+      if (!token) throw new Error('Invalid credentials')
 
       localStorage.setItem('token', JSON.stringify(token))
 
@@ -109,7 +103,10 @@ function Login (): ReactElement {
             <a href="/" className='logo-text'>{labels.LOGO_NAME}</a>
           </div>
           <HeaderMenu>
-            <FormContainer onSubmit={(event) => void handleSubmit(handleLogin)(event)}>
+            <FormContainer onSubmit={(e) => {
+              e.preventDefault()
+              void handleSubmit(handleLogin)(e)
+            }}>
               <InputField {...register('username')} placeholder="Username" />
               <InputField {...register('password')} type="password" placeholder="Password" />
               <LoginButton type="submit">Login</LoginButton>
