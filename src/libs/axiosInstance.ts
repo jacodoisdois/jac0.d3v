@@ -20,18 +20,15 @@ const axiosInstance = (): AxiosInstance => {
     return config
   }
 
-  // Intercepting all requests and adding the authorization header
   instance.interceptors.request.use(
     (config) => addAuthorizationHeader(config),
     async (error) => await Promise.reject(error)
   )
 
-  // Intercepting all responses and handling invalid token case
   instance.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
       if (error.response && error.response.status === 401) {
-        // Invalid token, redirect user to login page using window.location
         window.location.href = '/login'
       }
       return await Promise.reject(error)

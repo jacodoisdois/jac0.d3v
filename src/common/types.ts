@@ -29,3 +29,8 @@ export interface getPostResponse {
   data: Post
   pageInfo: PageInfo
 }
+
+export interface ErrorType {
+  message?: string
+  status?: string
+}

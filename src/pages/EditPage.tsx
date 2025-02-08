@@ -8,6 +8,9 @@ import TagInput from '../components/TagInput'
 import axiosInstance from '../libs/axiosInstance'
 import { useNavigate } from 'react-router-dom'
 import { GlobalStyle } from '../styles'
+import stringify from 'safe-stable-stringify'
+import { Bounce, toast } from 'react-toastify'
+import { type ErrorType } from '../common/types'
 
 const Container = styled.div`
   margin: 0.5%;
@@ -128,10 +131,32 @@ function EditPage (): ReactElement {
         }
       )
 
-      console.log('Post created successfully')
+      toast.success('Post created successfully!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
+
       navigate('/')
     } catch (error) {
-      console.log(error)
+      const errorObj = error as ErrorType
+      toast.error(stringify(errorObj?.message ?? 'Something got wrong when tried to login').replace(/"/g, ''), {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
     }
   }
 

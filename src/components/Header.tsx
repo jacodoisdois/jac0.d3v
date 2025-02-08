@@ -11,17 +11,20 @@ const HeaderContainer = styled.header`
 
 const HeaderMenu = styled.div`
   margin-top: 5px;
-  font-family: 'VT323', Arial;
+  font-family: 'VT323', Arial !important;
   
   .bt-menu {
-    margin: 0 5px 0 0px;
-    font-size: 0.3em;
+    margin: 0 20px 0 0px;
+    font-size: 40%;
     font-family: 'Press Start 2P';
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    transition: transform 0.15s ease-out;
   }
 
-  .bt-menu:hover{
+  .bt-menu:hover {
     color: #8e8e8e;
+    transform: scale(1.5); /* Aumenta o tamanho sem afetar o layout */
   }
   
 `
