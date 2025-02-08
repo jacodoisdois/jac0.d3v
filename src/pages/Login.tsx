@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react'
+import React, { useState, type ReactElement } from 'react'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -6,6 +6,9 @@ import axiosInstance from '../libs/axiosInstance'
 import { useNavigate } from 'react-router-dom'
 import { GlobalStyle } from '../styles'
 import { labels } from '../common/labels'
+import { Bounce, toast } from 'react-toastify'
+import stringify from 'safe-stable-stringify'
+import { type ErrorType } from '../common/types'
 
 const Header = styled.div`
   background-color: #282e3b;
@@ -34,7 +37,20 @@ const FormContainer = styled.form`
   flex-direction: column;
 `
 
-const InputField = styled.input`
+interface InputProps {
+  shake: boolean
+}
+
+const InputField = styled.input<InputProps>`
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-1px); }
+    40% { transform: translateX(1px); }
+    60% { transform: translateX(-1px); }
+    80% { transform: translateX(1px); }
+    100% { transform: translateX(0); }
+  }
+
   margin-bottom: 10px;
   padding: 8px;
   border: 1px solid #c9d7d0;
@@ -42,20 +58,30 @@ const InputField = styled.input`
   background-color: #2d508b;
   color: #f1f7f3;
   font-family: 'Press Start 2P', Arial;
+
+  ${({ shake }) => shake && 'animation: shake 0.3s ease-in-out;'}
 `
 
 const LoginButton = styled.button`
-  padding: 10px;
   border: none;
   border-radius: 4px;
   background-color: #233f6e;
   color: #f1f7f3;
   cursor: pointer;
-  font-family: 'Press Start 2P', Arial;
-
+  position: relative;
+  overflow: hidden;
   &:hover {
     background-color: #1b2127;
+    &>p{
+      transform: scale(1.05);
+    }
   }
+`
+
+const ButtonText = styled.p`
+  color: #f1f7f3;
+  font-family: 'Press Start 2P', Arial;
+  transition: transform 0.2s ease-in;
 `
 
 interface Inputs {
@@ -66,6 +92,20 @@ interface Inputs {
 function Login (): ReactElement {
   const { register, handleSubmit } = useForm<Inputs>()
   const navigate = useNavigate()
+
+  // Estados separados para cada input
+  const [shakeUsername, setShakeUsername] = useState(false)
+  const [shakePassword, setShakePassword] = useState(false)
+
+  const handleChange = (field: 'username' | 'password'): void => {
+    if (field === 'username') {
+      setShakeUsername(true)
+      setTimeout(() => { setShakeUsername(false) }, 100)
+    } else {
+      setShakePassword(true)
+      setTimeout(() => { setShakePassword(false) }, 100)
+    }
+  }
 
   const handleLogin: SubmitHandler<Inputs> = async (data, e): Promise<void> => {
     e?.preventDefault()
@@ -81,11 +121,33 @@ function Login (): ReactElement {
 
       localStorage.setItem('token', JSON.stringify(token))
 
-      console.log('Login successful!')
+      toast.success('Login successful!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
 
       navigate('/')
     } catch (error) {
-      console.log(error)
+      console.log(data)
+      const errorObj = error as ErrorType
+      toast.error(stringify(errorObj?.message ?? 'Something got wrong when tried to login').replace(/"/g, ''), {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
     }
   }
 
@@ -107,9 +169,26 @@ function Login (): ReactElement {
               e.preventDefault()
               void handleSubmit(handleLogin)(e)
             }}>
-              <InputField {...register('username')} placeholder="Username" />
-              <InputField {...register('password')} type="password" placeholder="Password" />
-              <LoginButton type="submit">Login</LoginButton>
+              <InputField
+                {...register('username')}
+                placeholder="Username"
+                onChange={(e) => {
+                  void register('username').onChange(e) // Mantém o comportamento do react-hook-form
+                  handleChange('username')
+                }}
+                shake={shakeUsername}
+              />
+              <InputField
+                {...register('password')}
+                type="password"
+                placeholder="Password"
+                onChange={(e) => {
+                  void register('password').onChange(e) // Mantém o comportamento do react-hook-form
+                  handleChange('password')
+                }}
+                shake={shakePassword}
+              />
+              <LoginButton type="submit"><ButtonText>Login</ButtonText></LoginButton>
             </FormContainer>
           </HeaderMenu>
         </Header>

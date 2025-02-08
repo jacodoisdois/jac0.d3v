@@ -5,9 +5,10 @@ import { PostPreview } from '../components/PostPreview'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import axiosInstance from '../libs/axiosInstance'
-import { type Post, type getPostsResponse } from '../common/types'
-import { isAxiosError } from 'axios'
+import { type ErrorType, type Post, type getPostsResponse } from '../common/types'
 import { GlobalStyle } from '../styles'
+import stringify from 'safe-stable-stringify'
+import { Bounce, toast } from 'react-toastify'
 
 const Posts = styled.div`
   color: #f2f7f3;
@@ -100,7 +101,18 @@ function Home (): ReactElement {
           groupPostsByDate(response.data)
         }
       } catch (e) {
-        if (isAxiosError(e)) console.log(e.message)
+        const errorObj = e as ErrorType
+        toast.error(stringify(errorObj?.message ?? 'Something got wrong when tried to login').replace(/"/g, ''), {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          transition: Bounce
+        })
       }
     }
     void fetchData()

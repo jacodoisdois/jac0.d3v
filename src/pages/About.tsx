@@ -10,7 +10,7 @@ const Content = styled.div`
   color: #f2f7f3;
   padding: 10px;
   width: 100%;
-  font-size: 0.9em;
+  font-size: 0.7em;
   display: flex;
   flex-grow: 1;
 `
@@ -51,18 +51,18 @@ const SectionContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   flex-grow: 1;
-  padding: 5%;
+  padding: 1%;
 `
 
 const Section = styled.div`
   text-align: justify;
   margin-top: 20px;
-  width: 100%;
+  width: 90%;
   
   .section, p{
-    font-family: "VT323";
-    font-size: 1.5em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 1.3em;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   }
 `
 
@@ -111,7 +111,8 @@ function About (): ReactElement {
       <Helmet>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet"></link>
       </Helmet>
       <GlobalStyle />
       <Container>
@@ -124,9 +125,9 @@ function About (): ReactElement {
             <SectionContainer>
               <Section className='section'>
                 <h2>About Me</h2>
-                <p>I am a technology professional with solid experience in the following technologies and languages: TypeScript, OracleQL, GraphQL, MySQL, Kafka, JavaScript, Ruby, and Rails. I have a background of 3 years providing N3 support for financial systems (Sinacor and brokertools by INOA) and participating in system homologation, including systems related to RSFN/SPB. During this period, I developed skills in handling fix messaging issues.</p>
-                <p>In 2023, I switched careers to become a back-end software developer, focusing on development in TypeScript in a distributed system. My experience includes working with Kafka, GraphQL, microservices, monorepo, and CI/CD and Kubernetes technologies.</p>
-                <p>I always enjoy finding technological ways to simplify daily tasks and solve arising problems using and researching for the best available tools.</p>
+                <p>I have experience working with various technologies and languages, including TypeScript, OracleQL, GraphQL, MySQL, Kafka, JavaScript, Ruby, and Rails. For about 3 years, I provided N3 support for financial systems (Sinacor and brokertools by INOA) and contributed to system homologation, including those related to RSFN/SPB. During this time, I also worked with <a href="https://pt.wikipedia.org/wiki/Financial_Information_eXchange" target='_blank' rel="noreferrer">FIX</a> messaging.</p>
+                <p>In 2023, I transitioned into a back-end software development role, focusing on TypeScript in distributed systems. I’ve had the opportunity to work with Kafka, GraphQL, microservices, monorepo, CI/CD, and Kubernetes technologies.</p>
+                <p>I’m always eager to find ways to make daily tasks simpler and enjoy exploring different tools to solve challenges more efficiently.</p>
               </Section>
               <Section>
                 <h2>Technologies</h2>

@@ -4,13 +4,14 @@ import { Helmet } from 'react-helmet'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import axiosInstance from '../libs/axiosInstance'
-import { type getPostResponse, type Post } from '../common/types'
-import { isAxiosError } from 'axios'
+import { type ErrorType, type getPostResponse, type Post } from '../common/types'
 import { GlobalStyle } from '../styles'
 import { useParams } from 'react-router-dom'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { formatDateString } from '../utils/formatDateString'
+import { toast, Bounce } from 'react-toastify'
+import stringify from 'safe-stable-stringify'
 
 const Container = styled.div`
   margin: 0.5%;
@@ -184,7 +185,18 @@ function FullPost (): ReactElement {
           setContent(DOMPurify.sanitize(marked.parse(response.data.content) as string))
         }
       } catch (e) {
-        if (isAxiosError(e)) console.log(e.message)
+        const errorObj = e as ErrorType
+        toast.error(stringify(errorObj?.message ?? 'Something got wrong when tried to login').replace(/"/g, ''), {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          transition: Bounce
+        })
       }
     }
     void fetchData()
